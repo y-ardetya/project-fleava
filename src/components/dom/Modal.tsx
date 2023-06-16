@@ -94,7 +94,7 @@ const index: React.FC<Props> = ({ modal, projects }) => {
         animate={active ? "open" : "close"}
         exit="close"
         ref={$cursor}
-        className="w-16 h-16 bg-teal-300 absolute pointer-events-none rounded-full flex items-center justify-center"
+        className="w-16 h-16 bg-teal-300 mt-[104vh] absolute pointer-events-none rounded-full flex items-center justify-center"
       >
         <div className="text-white font-bold text-xs">View</div>
       </m.div>

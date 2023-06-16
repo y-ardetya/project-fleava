@@ -5,9 +5,10 @@ const TransitionMaterial = shaderMaterial(
   {
     uTime: 0,
     uProgress: 0,
-    uTexture: null,
+    uTexture1: null,
     uTexture2: null,
     uScale: 1.0,
+    uResolution: [0, 0, 0, 0],
   },
   `
     varying vec2 vUv;
@@ -18,23 +19,25 @@ const TransitionMaterial = shaderMaterial(
     }
     `,
   `
-    uniform sampler2D uTexture;
+    uniform sampler2D uTexture1;
     uniform sampler2D uTexture2;
     uniform float uProgress;
     uniform float uScale;
-
+    uniform vec4 uResolution;
+ 
     varying vec2 vUv;
     
     void main() {
-        vec2 uv = (vUv - 0.5) * uScale + 0.5;
-        float slideProgress = uProgress;
-        float colorProgress = uv.y + slideProgress - uv.x * 0.5 + uv.x * 0.4;
-        slideProgress = smoothstep(slideProgress, slideProgress + slideProgress * 2.0, (1.0 - uv.y + uv.x) / 2.0);
 
-        vec4 color1 = texture2D(uTexture, vec2(uv.x, uv.y + slideProgress));
-        vec4 color2 = texture2D(uTexture2, vec2(uv.x, uv.y + slideProgress - 1.0));
-
-        vec4 outputColor = mix(color1, color2, slideProgress);
+        vec2 uv = (vUv - vec2(0.5)) * uResolution.zw + vec2(0.5);
+      
+        vec2 p = uv;
+        float x = uProgress;
+        x = smoothstep(0.0, 1.0, (x * 2.0 + p.y - 1.0));
+        vec4 outputColor = mix(
+            texture2D(uTexture1, (p - 0.5) * (1.0 - x) + 0.5),
+            texture2D(uTexture2,(p - 0.5) * x + 0.5),
+            x);
 
         gl_FragColor = outputColor;
     }
@@ -42,3 +45,5 @@ const TransitionMaterial = shaderMaterial(
 );
 
 extend({ TransitionMaterial });
+
+ 
