@@ -64,9 +64,9 @@ const TransitionMaterial = shaderMaterial(
             texture2D(uTexture2,(p - 0.5) * x + 0.5),
             x);
 
-        vec4 finalOutput = mix(outputColor, outputColor2, uProgress);
+        // vec4 finalOutput = mix(outputColor, outputColor2, uProgress);
 
-        gl_FragColor = finalOutput;
+        gl_FragColor = outputColor;
     }
     `
 );

@@ -1,4 +1,5 @@
 import { useStore } from "@/store/useStore";
+import { useEffect } from "react";
 
 interface Props {
   title: string;
@@ -7,12 +8,7 @@ interface Props {
 }
 
 const HeroSection: React.FC<Props> = ({ title, index, description }) => {
-  const { isClicked, setIsClicked }: any = useStore((state) => [
-    state.isClicked,
-    state.setIsClicked,
-  ]);
-
-  console.log(isClicked);
+  const [setIsClickedPrev, setIsClickedNext]: any = useStore(state => [state.setIsClickedPrev, state.setIsClickedNext])
   
 
   return (
@@ -26,9 +22,9 @@ const HeroSection: React.FC<Props> = ({ title, index, description }) => {
           <h1>{description}</h1>
         </div>
         <div className="flex flex-row gap-x-4 ml-48 text-2xl">
-          <button className="cursor-pointer" onClick={() => setIsClicked}>prev</button>
+          <button className="cursor-pointer" onClick={() => setIsClickedPrev()}>prev</button>
           <h1>/</h1>
-          <button>Next</button>
+          <button onClick={() => setIsClickedNext()}>Next</button>
         </div>
       </div>
     </div>

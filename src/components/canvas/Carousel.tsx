@@ -2,7 +2,7 @@
 import { TransitionMaterial } from "./TransitionMaterial";
 import { useThree } from "@react-three/fiber";
 import { useTexture, Html } from "@react-three/drei";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useStore } from "@/store/useStore";
 
@@ -18,10 +18,10 @@ const Carousel = () => {
   const { viewport } = useThree();
   const $shader = useRef<any>(null);
   const textures = useTexture([
-    "/images/three.jpg",
-    "/images/four.jpg",
     "/images/one.jpg",
     "/images/two.jpg",
+    "/images/three.jpg",
+    "/images/four.jpg",
     "/images/five.jpg",
   ]);
   const displace = useTexture("/images/disp1.jpg");
@@ -29,9 +29,32 @@ const Carousel = () => {
   const [currentTextureIndex, setCurrentTextureIndex] = useState(0);
   const currentTexture = textures[currentTextureIndex];
 
-  const handleClick = () => {
+  const handlePrev = () => {
+    const prevTextureIndex = (currentTextureIndex - 1) % textures.length;
+    console.log('prevTexture', prevTextureIndex);
+    if (currentTextureIndex === 0) {
+
+      return
+    }
+    
+    setCurrentTextureIndex(prevTextureIndex);
+    console.log('current', currentTextureIndex);
+    gsap.fromTo(
+      $shader.current.uniforms.uProgress,
+      { value: 1 },
+      { value: 0, duration: 1.5, ease: "power2.easeOut" }
+    );
+  };
+
+  const handleNext = () => {
     const nextTextureIndex = (currentTextureIndex + 1) % textures.length;
+    
+    console.log('nextTexture', nextTextureIndex);
+    
+    
+    
     setCurrentTextureIndex(nextTextureIndex);
+    console.log('current', currentTextureIndex);
 
     gsap.fromTo(
       $shader.current.uniforms.uProgress,
@@ -40,7 +63,25 @@ const Carousel = () => {
     );
   };
 
- 
+  const [isClickPrev, isClickNext, setIsClickedPrev, setIsClickedNext]: any = useStore(state => [state.isClickPrev, state.isClickNext, state.setIsClickedPrev, state.setIsClickedNext])
+
+  useEffect(() => {
+    if (isClickPrev === true) {
+      handlePrev()
+
+      console.log('prev');
+      
+      setIsClickedPrev()
+    }
+    
+    if (isClickNext === true) {
+      handleNext()
+      
+      console.log('next');
+      
+      setIsClickedNext()
+    }
+  }, [isClickPrev, isClickNext])
 
   return (
     <>
@@ -58,15 +99,6 @@ const Carousel = () => {
           uDisplace={displace}
         />
       </mesh>
-      <Html>
-        <div className="w-screen h-screen">
-          <button
-            className="absolute text-white text-4xl"
-          >
-            click
-          </button>
-        </div>
-      </Html>
     </>
   );
 };
