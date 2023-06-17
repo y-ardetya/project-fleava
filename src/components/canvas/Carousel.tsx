@@ -4,6 +4,7 @@ import { useThree } from "@react-three/fiber";
 import { useTexture, Html } from "@react-three/drei";
 import { useRef, useState } from "react";
 import { gsap } from "gsap";
+import { useStore } from "@/store/useStore";
 
 declare global {
   namespace JSX {
@@ -39,6 +40,8 @@ const Carousel = () => {
     );
   };
 
+ 
+
   return (
     <>
       <mesh scale={[viewport.width, viewport.height, 1]} position={[0, 0, 0]}>
@@ -58,7 +61,6 @@ const Carousel = () => {
       <Html>
         <div className="w-screen h-screen">
           <button
-            onClick={handleClick}
             className="absolute text-white text-4xl"
           >
             click

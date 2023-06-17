@@ -1,4 +1,4 @@
-import React from "react";
+import { useStore } from "@/store/useStore";
 
 interface Props {
   title: string;
@@ -7,6 +7,14 @@ interface Props {
 }
 
 const HeroSection: React.FC<Props> = ({ title, index, description }) => {
+  const { isClicked, setIsClicked }: any = useStore((state) => [
+    state.isClicked,
+    state.setIsClicked,
+  ]);
+
+  console.log(isClicked);
+  
+
   return (
     <div className="h-full w-full flex flex-col justify-center">
       <div className="flex justify-center items-start flex-col gap-y-10 text-white">
@@ -18,7 +26,7 @@ const HeroSection: React.FC<Props> = ({ title, index, description }) => {
           <h1>{description}</h1>
         </div>
         <div className="flex flex-row gap-x-4 ml-48 text-2xl">
-          <button>Prev</button>
+          <button className="cursor-pointer" onClick={() => setIsClicked}>prev</button>
           <h1>/</h1>
           <button>Next</button>
         </div>
