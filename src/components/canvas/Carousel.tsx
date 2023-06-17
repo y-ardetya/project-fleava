@@ -23,21 +23,10 @@ const Carousel = () => {
     "/images/two.jpg",
     "/images/five.jpg",
   ]);
+  const displace = useTexture("/images/disp1.jpg");
 
   const [currentTextureIndex, setCurrentTextureIndex] = useState(0);
   const currentTexture = textures[currentTextureIndex];
-
-  //Image Aspect Ratio
-  const imageAspect = textures[4].image.height / textures[4].image.width;
-  let a1;
-  let a2;
-  if (viewport.width / viewport.height > imageAspect) {
-    a1 = (viewport.width / viewport.height) * imageAspect;
-    a2 = 1;
-  } else {
-    a1 = 1;
-    a2 = viewport.height / viewport.width / imageAspect;
-  }
 
   const handleClick = () => {
     const nextTextureIndex = (currentTextureIndex + 1) % textures.length;
@@ -46,7 +35,7 @@ const Carousel = () => {
     gsap.fromTo(
       $shader.current.uniforms.uProgress,
       { value: 0 },
-      { value: 1, duration: 2, ease: "power4.inOut" }
+      { value: 1, duration: 1.5, ease: "power2.easeOut" }
     );
   };
 
@@ -57,9 +46,13 @@ const Carousel = () => {
         <transitionMaterial
           ref={$shader}
           key={TransitionMaterial}
-          uResolution={[viewport.width, viewport.height, a1, a2]}
           uTexture1={currentTexture}
           uTexture2={textures[(currentTextureIndex + 1) % textures.length]}
+          uImageRes={[
+            currentTexture.source.data.width,
+            currentTexture.source.data.height,
+          ]}
+          uDisplace={displace}
         />
       </mesh>
       <Html>

@@ -1,7 +1,8 @@
 "use client";
 
 import Scene from "@/components/canvas/Scene";
-import Container from "@/components/dom/ModalContainer";
+import ModalContainer from "@/components/dom/ModalContainer";
+import Overlay from "@/components/dom/Overlay";
 import { ScrollControls, Scroll } from "@react-three/drei";
 //@ts-ignore
 import { Canvas } from "@react-three/fiber";
@@ -15,7 +16,8 @@ export default function Home() {
         <ScrollControls pages={3}>
           <Scene />
           <Scroll html>
-            <Container />
+            <Overlay />
+            <ModalContainer />
           </Scroll>
         </ScrollControls>
       </Canvas>
