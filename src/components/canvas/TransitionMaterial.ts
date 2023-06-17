@@ -44,19 +44,17 @@ const TransitionMaterial = shaderMaterial(
         vec4 colorB = texture2D(uTexture2, uv);
 
         vec4 displacement = texture2D(uDisplace, uv);
+        vec2 displacedUV = uv + vec2(0.0, displacement.r * 0.5);
 
         float disp1 = (colorA.r + colorA.g + colorA.b) * 0.33;
         float disp2 = (colorB.r + colorB.g + colorB.b) * 0.33;
 
-        float intensity = 0.5;
+        float intensity = 1.8;
 
-        vec4 displace = texture2D(uTexture1, vec2(uv.x, uv.y + uProgress * (disp2 * intensity)));
-        vec4 displace2 = texture2D(uTexture2, vec2(uv.x, uv.y + (1.0 - uProgress) * (disp1 * intensity)));
+        vec4 displace = texture2D(uTexture1, vec2(displacedUV.x, uv.y + uProgress * (disp2 * intensity)));
+        vec4 displace2 = texture2D(uTexture2, vec2(displacedUV.x, uv.y + (1.0 - uProgress) * (disp1 * intensity)));
         
-        vec4 combineDisp1 = mix(displace, displacement, uProgress);
-        vec4 combineDisp2 = mix(displace2, displacement, 1.0 - uProgress);
-        
-        vec4 outputColor = mix(combineDisp1, combineDisp2, uProgress);
+        vec4 outputColor = mix(displace, displace2, uProgress);
 
         vec2 p = uv;
         float x = uProgress;
