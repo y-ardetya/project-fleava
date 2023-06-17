@@ -13,11 +13,10 @@ export default function Home() {
       <Canvas>
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
-        <ScrollControls pages={3}>
+        <ScrollControls pages={5}>
           <Scene />
           <Scroll html>
             <Overlay />
-            <ModalContainer />
           </Scroll>
         </ScrollControls>
       </Canvas>

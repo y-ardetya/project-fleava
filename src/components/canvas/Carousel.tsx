@@ -49,8 +49,8 @@ const Carousel = () => {
           uTexture1={currentTexture}
           uTexture2={textures[(currentTextureIndex + 1) % textures.length]}
           uImageRes={[
-            currentTexture.source.data.width,
-            currentTexture.source.data.height,
+            textures[0].source.data.width,
+            textures[0].source.data.height,
           ]}
           uDisplace={displace}
         />
