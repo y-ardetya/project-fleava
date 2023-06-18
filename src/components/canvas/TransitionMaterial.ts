@@ -39,48 +39,37 @@ const TransitionMaterial = shaderMaterial(
     }
 
     void main() {
-      vec2 uv = vUv;
-      vec4 t1 = texture2D(uTexture1, uv);
-      vec4 t2 = texture2D(uTexture2, uv);
-
-      gl_FragColor = mix(t1, t2, uProgress);
-    }
-
-   
-  //   void main() {
-  //     vec2 uv = CoverUV(vUv, uRes, uImageRes.xy);
+      vec2 uv = CoverUV(vUv, uRes, uImageRes.xy);
       
-  //     float intensity = 2.8;
+      float intensity = 2.8;
   
-  //     vec4 colorA = texture2D(uTexture1, uv);
-  //     vec4 colorB = texture2D(uTexture2, uv);
+      vec4 colorA = texture2D(uTexture1, uv);
+      vec4 colorB = texture2D(uTexture2, uv);
   
-  //     vec4 displacement = texture2D(uDisplace, uv);
-  //     vec2 displacedUV = uv + vec2(0.0, displacement.b * 0.5);
+      vec4 displacement = texture2D(uDisplace, uv);
+      vec2 displacedUV = uv + vec2(0.0, displacement.b * 0.5);
   
-  //     float disp1 = (colorA.r + colorA.g + colorA.b) * .33;
-  //     float disp2 = (colorB.r + colorB.g + colorB.b) * .33;
+      float disp1 = (colorA.r + colorA.g + colorA.b) * .33;
+      float disp2 = (colorB.r + colorB.g + colorB.b) * .33;
   
-  //     vec2 displaceUV1 = vec2(displacedUV.x, uv.y + uProgress * disp2 * intensity);
-  //     vec2 displaceUV2 = vec2(displacedUV.x, uv.y + uProgress * disp1 * intensity);
+      vec2 displaceUV1 = vec2(displacedUV.x, uv.y + uProgress * disp2 * intensity);
+      vec2 displaceUV2 = vec2(displacedUV.x, uv.y + (1.0 - uProgress) * disp1 * intensity);
   
-  //     vec4 displace = texture2D(uTexture1, displaceUV1);
-  //     vec4 displace2 = texture2D(uTexture2, displaceUV2);
+      vec4 displace = texture2D(uTexture1, displaceUV1);
+      vec4 displace2 = texture2D(uTexture2, displaceUV2);
   
-  //     vec4 outputColor = mix(displace, displace2, uProgress);
+      vec4 outputColor = mix(displace, displace2, uProgress);
   
-  //     float x = uProgress;
-  //     vec2 p = uv;
-  //     x = smoothstep(0.0, 1.0, (x * 2.0 + p.x - 1.0));
+      float x = uProgress;
+      vec2 p = uv;
+      x = smoothstep(0.0, 1.0, (x * 2.0 + p.x - 1.0));
+      vec4 outputColor2 = mix(
+          texture2D(uTexture1, (p - 0.5) * (1.0 - x) + 0.5),
+          texture2D(uTexture2, (p - 0.5) * x + 0.5),
+          x);
   
-  //     vec4 outputColor2 = mix(
-  //         texture2D(uTexture1, (p - 0.5) * (1.0 - x) + 0.5),
-  //         texture2D(uTexture2, (p - 0.5) * x + 0.5),
-  //         x);
-  
-  //     gl_FragColor = mix(outputColor, outputColor2, uProgress);
-  // }
-  
+      gl_FragColor = mix(outputColor, outputColor2, uProgress);
+  }
     `
 );
 

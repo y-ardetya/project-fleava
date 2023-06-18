@@ -27,33 +27,59 @@ const Carousel = () => {
   const displace = useTexture("/images/disp1.jpg");
 
   const [currentTextureIndex, setCurrentTextureIndex] = useState(0);
+  const [nextTextureIndex, setNextTextureIndex] = useState(1);
   const currentTexture = textures[currentTextureIndex];
+  const nextTexture = textures[nextTextureIndex];
 
-  const handlePrev = () => {
-    const prevTextureIndex = (currentTextureIndex - 1) % textures.length;
-    if (currentTextureIndex === 0) {
-      return;
-    }
-    // gsap.fromTo(
-    //   $shader.current.uniforms.uProgress,
-    //   { value: 1 },
-    //   { value: 0, duration: 1.5, ease: "power2.easeOut" }
-    // );
-    setCurrentTextureIndex(prevTextureIndex);
-  };
+  // const handlePrev = () => {
+  //   if (currentTextureIndex === 0 && nextTextureIndex === 1) {
+  //     return;
+  //   }
+
+  //   const currentIndex = (currentTextureIndex - 1) % textures.length;
+  //   const nextIndex = (nextTextureIndex - 1) % textures.length;
+
+  //   const tl = gsap.timeline({
+  //     onComplete: () => {
+  //       setCurrentTextureIndex(currentIndex);
+  //       setNextTextureIndex(nextIndex);
+  //       $shader.current.uniforms.uProgress.value = 1;
+  //     },
+  //   });
+  //   tl.fromTo(
+  //     $shader.current.uniforms.uProgress,
+  //     { value: 1 },
+  //     { value: 0, duration: 1.0, ease: "power2.easeOut" }
+  //   );
+  // };
 
   const handleNext = () => {
-    const nextTextureIndex = (currentTextureIndex + 1) % textures.length;
-    const tl = gsap.timeline();
+    if (
+      currentTextureIndex === textures.length - 1 &&
+      nextTextureIndex === textures.length - 1
+    ) {
+      setCurrentTextureIndex(0);
+      setNextTextureIndex(1);
+      $shader.current.uniforms.uProgress.value = 0;
+
+      return;
+    }
+
+    const currentIndex = (currentTextureIndex + 1) % textures.length;
+    const nextIndex = (nextTextureIndex + 1) % textures.length;
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setCurrentTextureIndex(currentIndex);
+        setNextTextureIndex(nextIndex);
+        $shader.current.uniforms.uProgress.value = 0;
+      },
+    });
     tl.fromTo(
       $shader.current.uniforms.uProgress,
       { value: 0 },
-      { value: 1, duration: 1.5, ease: "power2.easeOut" }
+      { value: 1, duration: 0.5, ease: "power2.easeOut" }
     );
-    setTimeout(() => {
-      tl.kill();
-      setCurrentTextureIndex(nextTextureIndex);
-    }, 1500);
   };
 
   const [isClickPrev, isClickNext, setIsClickedPrev, setIsClickedNext]: any =
@@ -65,26 +91,30 @@ const Carousel = () => {
     ]);
 
   useEffect(() => {
-    if (isClickPrev === true) {
-      handlePrev();
-      setIsClickedPrev();
-    }
+    // if (isClickPrev === true) {
+    //   handlePrev();
+    //   setIsClickedPrev();
+
+    //   return;
+    // }
 
     if (isClickNext === true) {
       handleNext();
       setIsClickedNext();
+
+      return;
     }
   }, [isClickPrev, isClickNext]);
 
   return (
     <>
       <mesh scale={[viewport.width, viewport.height, 1]} position={[0, 0, 0]}>
-        <planeGeometry args={[1, 1, 2, 2]} />
+        <planeGeometry />
         <transitionMaterial
           ref={$shader}
           key={TransitionMaterial}
           uTexture1={currentTexture}
-          uTexture2={textures[(currentTextureIndex + 1) % textures.length]}
+          uTexture2={nextTexture}
           uImageRes={[
             textures[0].source.data.width,
             textures[0].source.data.height,

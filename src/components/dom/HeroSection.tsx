@@ -30,7 +30,7 @@ const HeroSection: React.FC<Props> = ({
           <h1>{description}</h1>
         </div>
         <div className="flex flex-row gap-x-4 ml-48 text-2xl">
-          <button
+          {/* <button
             className="cursor-pointer"
             onClick={() => {
               setIsClickedPrev();
@@ -39,14 +39,14 @@ const HeroSection: React.FC<Props> = ({
           >
             Prev
           </button>
-          <h1>/</h1>
+          <h1>/</h1> */}
           <button
             onClick={() => {
               setIsClickedNext();
               next();
             }}
           >
-            Next
+            imejin
           </button>
         </div>
       </div>
