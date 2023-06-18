@@ -6,7 +6,7 @@ import Project from "@/components/dom/Accordion";
 import Modal from "@/components/dom/Modal";
 
 export default function ModalContainer() {
-  const [modal, setModal] = useState({ active: false, index: 0 });
+  // const [modal, setModal] = useState({ active: false, index: 0 });
   return (
     <main className="flex items-center justify-center h-screen mt-[100vh]">
       <div className="w-screen flex items-center justify-center flex-col">
@@ -17,12 +17,12 @@ export default function ModalContainer() {
               index={index}
               title={project.title}
               description={project.description}
-              setModal={setModal}
+              // setModal={setModal}
             />
           );
         })}
       </div>
-      <Modal modal={modal} projects={accordionData} />
+      {/* <Modal modal={modal} projects={accordionData} /> */}
     </main>
   );
 }
