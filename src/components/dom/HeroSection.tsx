@@ -1,15 +1,23 @@
 import { useStore } from "@/store/useStore";
-import { useEffect } from "react";
-
 interface Props {
   title: string;
   index: string;
   description: string;
+  prev: any;
+  next: any;
 }
 
-const HeroSection: React.FC<Props> = ({ title, index, description }) => {
-  const [setIsClickedPrev, setIsClickedNext]: any = useStore(state => [state.setIsClickedPrev, state.setIsClickedNext])
-  
+const HeroSection: React.FC<Props> = ({
+  title,
+  index,
+  description,
+  prev,
+  next,
+}) => {
+  const [setIsClickedPrev, setIsClickedNext]: any = useStore((state) => [
+    state.setIsClickedPrev,
+    state.setIsClickedNext,
+  ]);
 
   return (
     <div className="h-full w-full flex flex-col justify-center">
@@ -22,9 +30,24 @@ const HeroSection: React.FC<Props> = ({ title, index, description }) => {
           <h1>{description}</h1>
         </div>
         <div className="flex flex-row gap-x-4 ml-48 text-2xl">
-          <button className="cursor-pointer" onClick={() => setIsClickedPrev()}>prev</button>
+          <button
+            className="cursor-pointer"
+            onClick={() => {
+              setIsClickedPrev();
+              prev();
+            }}
+          >
+            Prev
+          </button>
           <h1>/</h1>
-          <button onClick={() => setIsClickedNext()}>Next</button>
+          <button
+            onClick={() => {
+              setIsClickedNext();
+              next();
+            }}
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>

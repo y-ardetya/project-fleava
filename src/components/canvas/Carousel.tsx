@@ -1,7 +1,7 @@
 //@ts-ignore
 import { TransitionMaterial } from "./TransitionMaterial";
 import { useThree } from "@react-three/fiber";
-import { useTexture, Html } from "@react-three/drei";
+import { useTexture } from "@react-three/drei";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useStore } from "@/store/useStore";
@@ -31,57 +31,50 @@ const Carousel = () => {
 
   const handlePrev = () => {
     const prevTextureIndex = (currentTextureIndex - 1) % textures.length;
-    console.log('prevTexture', prevTextureIndex);
     if (currentTextureIndex === 0) {
-
-      return
+      return;
     }
-    
+    // gsap.fromTo(
+    //   $shader.current.uniforms.uProgress,
+    //   { value: 1 },
+    //   { value: 0, duration: 1.5, ease: "power2.easeOut" }
+    // );
     setCurrentTextureIndex(prevTextureIndex);
-    console.log('current', currentTextureIndex);
-    gsap.fromTo(
-      $shader.current.uniforms.uProgress,
-      { value: 1 },
-      { value: 0, duration: 1.5, ease: "power2.easeOut" }
-    );
   };
 
   const handleNext = () => {
     const nextTextureIndex = (currentTextureIndex + 1) % textures.length;
-    
-    console.log('nextTexture', nextTextureIndex);
-    
-    
-    
-    setCurrentTextureIndex(nextTextureIndex);
-    console.log('current', currentTextureIndex);
-
-    gsap.fromTo(
+    const tl = gsap.timeline();
+    tl.fromTo(
       $shader.current.uniforms.uProgress,
       { value: 0 },
       { value: 1, duration: 1.5, ease: "power2.easeOut" }
     );
+    setTimeout(() => {
+      tl.kill();
+      setCurrentTextureIndex(nextTextureIndex);
+    }, 1500);
   };
 
-  const [isClickPrev, isClickNext, setIsClickedPrev, setIsClickedNext]: any = useStore(state => [state.isClickPrev, state.isClickNext, state.setIsClickedPrev, state.setIsClickedNext])
+  const [isClickPrev, isClickNext, setIsClickedPrev, setIsClickedNext]: any =
+    useStore((state) => [
+      state.isClickPrev,
+      state.isClickNext,
+      state.setIsClickedPrev,
+      state.setIsClickedNext,
+    ]);
 
   useEffect(() => {
     if (isClickPrev === true) {
-      handlePrev()
+      handlePrev();
+      setIsClickedPrev();
+    }
 
-      console.log('prev');
-      
-      setIsClickedPrev()
-    }
-    
     if (isClickNext === true) {
-      handleNext()
-      
-      console.log('next');
-      
-      setIsClickedNext()
+      handleNext();
+      setIsClickedNext();
     }
-  }, [isClickPrev, isClickNext])
+  }, [isClickPrev, isClickNext]);
 
   return (
     <>

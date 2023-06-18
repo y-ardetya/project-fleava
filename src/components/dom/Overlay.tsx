@@ -11,6 +11,24 @@ import {
 
 const Overlay = () => {
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(0);
+
+  const prev = () => {
+    if (active === 0) {
+      setActive(heroData.length - 1);
+    } else {
+      setActive(active - 1);
+    }
+  };
+
+  const next = () => {
+    if (active === heroData.length - 1) {
+      setActive(0);
+    } else {
+      setActive(active + 1);
+    }
+  };
+
   return (
     <>
       <div className="w-screen h-screen">
@@ -53,18 +71,20 @@ const Overlay = () => {
             </div>
           </div>
         </m.div>
-
-        {heroData.map((hero, index) => {
-          return (
-            <HeroSection
-              key={index}
-              index={hero.index}
-              title={hero.title}
-              description={hero.description}
-            />
-          );
-        })}
-        <ModalContainer />
+        {heroData
+          .filter((hero, i) => i === active)
+          .map((hero, i) => {
+            return (
+              <HeroSection
+                prev={() => prev()}
+                next={() => next()}
+                key={i}
+                index={hero.index}
+                title={hero.title}
+                description={hero.description}
+              />
+            );
+          })}
       </div>
     </>
   );
