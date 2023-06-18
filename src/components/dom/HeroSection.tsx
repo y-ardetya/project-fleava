@@ -31,7 +31,7 @@ const HeroSection: React.FC<Props> = ({ title, description, dataLength }) => {
           <h1>{description}</h1>
         </div>
         <div className="flex flex-row gap-x-4 ml-48 text-2xl">
-          <button className="cursor-pointer" onClick={() => buttonClickHandler(true)}>prev</button>
+          <button className="cursor-pointer" onClick={() => buttonClickHandler(true)}>Prev</button>
           <h1>/</h1>
           <button onClick={() => buttonClickHandler()}>Next</button>
         </div>

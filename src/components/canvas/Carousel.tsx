@@ -16,14 +16,10 @@ declare global {
 
 const Carousel = () => {
   const { viewport } = useThree();
-
-  const [
-    dataIndex,
-    setDataIndex,
-  ]: any = useStore(state => [
+  const [dataIndex, setDataIndex]: any = useStore((state) => [
     state.dataIndex,
     state.setDataIndex,
-  ])
+  ]);
 
   const $shader = useRef<any>(null);
   const textures = useTexture([
@@ -38,23 +34,23 @@ const Carousel = () => {
   const currentTexture = textures[dataIndex];
 
   const handleTransition = () => {
-    setDataIndex(dataIndex)
+    setDataIndex(dataIndex);
 
     gsap.fromTo(
       $shader.current.uniforms.uProgress,
       { value: 0 },
-      { value: 1, duration: 0.6, ease: "power2.easeOut" }
+      { value: 1, duration: 1.0, ease: "power2.easeOut" }
     );
   };
 
   useEffect(() => {
-    handleTransition()
-  }, [dataIndex])
+    handleTransition();
+  }, [dataIndex]);
 
   return (
     <>
       <mesh scale={[viewport.width, viewport.height, 1]} position={[0, 0, 0]}>
-        <planeGeometry args={[1, 1, 2, 2]} />
+        <planeGeometry />
         <transitionMaterial
           ref={$shader}
           key={TransitionMaterial}

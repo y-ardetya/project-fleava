@@ -13,7 +13,7 @@ export default function Home() {
       <Canvas>
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
-        <ScrollControls pages={5}>
+        <ScrollControls pages={2}>
           <Scene />
           <Scroll html>
             <Overlay />
