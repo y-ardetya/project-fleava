@@ -1,8 +1,8 @@
 //@ts-ignore
 import { TransitionMaterial } from "./TransitionMaterial";
 import { useThree } from "@react-three/fiber";
-import { useTexture, Html } from "@react-three/drei";
-import { useEffect, useRef, useState } from "react";
+import { useTexture } from "@react-three/drei";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { useStore } from "@/store/useStore";
 
@@ -16,6 +16,15 @@ declare global {
 
 const Carousel = () => {
   const { viewport } = useThree();
+
+  const [
+    dataIndex,
+    setDataIndex,
+  ]: any = useStore(state => [
+    state.dataIndex,
+    state.setDataIndex,
+  ])
+
   const $shader = useRef<any>(null);
   const textures = useTexture([
     "/images/one.jpg",
@@ -26,62 +35,21 @@ const Carousel = () => {
   ]);
   const displace = useTexture("/images/disp1.jpg");
 
-  const [currentTextureIndex, setCurrentTextureIndex] = useState(0);
-  const currentTexture = textures[currentTextureIndex];
+  const currentTexture = textures[dataIndex];
 
-  const handlePrev = () => {
-    const prevTextureIndex = (currentTextureIndex - 1) % textures.length;
-    console.log('prevTexture', prevTextureIndex);
-    if (currentTextureIndex === 0) {
-
-      return
-    }
-    
-    setCurrentTextureIndex(prevTextureIndex);
-    console.log('current', currentTextureIndex);
-    gsap.fromTo(
-      $shader.current.uniforms.uProgress,
-      { value: 1 },
-      { value: 0, duration: 1.5, ease: "power2.easeOut" }
-    );
-  };
-
-  const handleNext = () => {
-    const nextTextureIndex = (currentTextureIndex + 1) % textures.length;
-    
-    console.log('nextTexture', nextTextureIndex);
-    
-    
-    
-    setCurrentTextureIndex(nextTextureIndex);
-    console.log('current', currentTextureIndex);
+  const handleTransition = () => {
+    setDataIndex(dataIndex)
 
     gsap.fromTo(
       $shader.current.uniforms.uProgress,
       { value: 0 },
-      { value: 1, duration: 1.5, ease: "power2.easeOut" }
+      { value: 1, duration: 0.6, ease: "power2.easeOut" }
     );
   };
 
-  const [isClickPrev, isClickNext, setIsClickedPrev, setIsClickedNext]: any = useStore(state => [state.isClickPrev, state.isClickNext, state.setIsClickedPrev, state.setIsClickedNext])
-
   useEffect(() => {
-    if (isClickPrev === true) {
-      handlePrev()
-
-      console.log('prev');
-      
-      setIsClickedPrev()
-    }
-    
-    if (isClickNext === true) {
-      handleNext()
-      
-      console.log('next');
-      
-      setIsClickedNext()
-    }
-  }, [isClickPrev, isClickNext])
+    handleTransition()
+  }, [dataIndex])
 
   return (
     <>
@@ -91,7 +59,7 @@ const Carousel = () => {
           ref={$shader}
           key={TransitionMaterial}
           uTexture1={currentTexture}
-          uTexture2={textures[(currentTextureIndex + 1) % textures.length]}
+          uTexture2={textures[(dataIndex + 1) % textures.length]}
           uImageRes={[
             textures[0].source.data.width,
             textures[0].source.data.height,

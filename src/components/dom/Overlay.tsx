@@ -9,8 +9,19 @@ import {
   SecondLayerVariants,
 } from "@/helpers/Variants";
 
+import { useStore } from "@/store/useStore";
+
 const Overlay = () => {
   const [open, setOpen] = useState(false);
+
+  const [
+    dataIndex,
+  ]: any = useStore(
+    state => [
+      state.dataIndex,
+    ]
+  )
+
   return (
     <>
       <div className="w-screen h-screen">
@@ -54,16 +65,11 @@ const Overlay = () => {
           </div>
         </m.div>
 
-        {heroData.map((hero, index) => {
-          return (
-            <HeroSection
-              key={index}
-              index={hero.index}
-              title={hero.title}
-              description={hero.description}
-            />
-          );
-        })}
+        <HeroSection
+          title={heroData[dataIndex].title}
+          description={heroData[dataIndex].description}
+          dataLength={heroData.length}
+        />
         <ModalContainer />
       </div>
     </>
