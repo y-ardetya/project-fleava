@@ -14,7 +14,7 @@ declare global {
   }
 }
 
-const Carousel = () => {
+const Carousel = ({ position }: any) => {
   const { viewport } = useThree();
   const [dataIndex, setDataIndex]: any = useStore((state) => [
     state.dataIndex,
@@ -34,8 +34,8 @@ const Carousel = () => {
   const currentTexture = textures[dataIndex];
 
   const handleTransition = () => {
+    if (dataIndex === 0) return;
     setDataIndex(dataIndex);
-
     gsap.fromTo(
       $shader.current.uniforms.uProgress,
       { value: 0 },
@@ -49,10 +49,7 @@ const Carousel = () => {
 
   return (
     <>
-      <mesh
-        scale={[viewport.width - 1, viewport.height - 1, 1]}
-        position={[0, 0, -2]}
-      >
+      <mesh scale={[viewport.width, viewport.height, 1]} position={position}>
         <planeGeometry />
         <transitionMaterial
           ref={$shader}

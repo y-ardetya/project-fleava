@@ -26,8 +26,8 @@ uniform sampler2D uTexture1;
         vec4 displacement = texture2D(uDisplace, uv);
         vec2 displacedUV = uv + vec2(0.0, displacement.r * 0.2);
 
-        float disp1 = (colorA.r + colorA.g + colorA.b) * .33;
-        float disp2 = (colorB.r + colorB.g + colorB.b) * .33;
+        float disp1 = (colorA.r + colorA.g + colorA.b) * 0.33;
+        float disp2 = (colorB.r + colorB.g + colorB.b) * 0.33;
 
         float intensity = 1.5;
 

@@ -4,29 +4,20 @@ import Carousel from "@/components/canvas/Carousel";
 import Scene from "@/components/canvas/Scene";
 import Overlay from "@/components/dom/Overlay";
 import { ScrollControls, Scroll, OrbitControls } from "@react-three/drei";
-//@ts-ignore
-import { Canvas } from "@react-three/fiber";
 
 const Experience = () => {
   return (
     <>
-   
-      <Canvas>
-        <ambientLight />
-        <OrbitControls enableZoom={false} />
-        <pointLight position={[10, 10, 10]} />
-        <ScrollControls pages={7}>
-          <Scene />
-          <Scroll>
-            <group position={[0, -7.7, 0]}>
-              {/* <Carousel /> */}
-            </group>
-          </Scroll>
-          <Scroll html>
-            <Overlay />
-          </Scroll>
-        </ScrollControls>
-      </Canvas>
+      <OrbitControls enableZoom={false} />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[0, 0, 5]} intensity={1} />
+      <ScrollControls pages={7}>
+        <Scene />
+        <Scroll></Scroll>
+        <Scroll html>
+          <Overlay />
+        </Scroll>
+      </ScrollControls>
     </>
   );
 };
