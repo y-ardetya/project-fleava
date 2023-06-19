@@ -58,3 +58,22 @@ export const ModalVariants = {
     },
   },
 };
+
+export const ImageVariants = {
+  hidden: {
+    scale: 0.8,
+    // clipPath: "polygon(50% 0, 50% 0, 50% 100%, 50% 100%)",
+    transition: {
+      duration: 1,
+      ease: "easeInOut",
+    },
+  },
+  visible: {
+    scale: 1,
+    // clipPath: "polygon(100% 0, 0 0, 0 100%, 100% 100%)",
+    transition: {
+      duration: 1,
+      ease: "easeInOut",
+    },
+  },
+};

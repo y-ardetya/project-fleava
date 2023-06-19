@@ -53,7 +53,7 @@ const Carousel = () => {
         <planeGeometry />
         <transitionMaterial
           ref={$shader}
-          key={TransitionMaterial}
+          key={TransitionMaterial.key}
           uTexture1={currentTexture}
           uTexture2={textures[(dataIndex + 1) % textures.length]}
           uImageRes={[

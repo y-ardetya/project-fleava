@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -12,6 +11,6 @@ html,
   width: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Comfortaa', cursive;
+  font-family: "Comfortaa", cursive;
+  background-color: black;
 }
-
