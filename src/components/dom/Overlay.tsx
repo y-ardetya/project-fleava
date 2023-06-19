@@ -48,7 +48,7 @@ const Overlay = () => {
 
   return (
     <>
-      <div className="w-screen h-screen mt-[100vh]">
+      <div className="w-screen h-screen">
         <nav className="flex justify-end mr-36 mt-10 gap-x-5 z-20">
           <h1 className="text-white">Fleava</h1>
           <h1

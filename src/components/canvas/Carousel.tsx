@@ -49,7 +49,10 @@ const Carousel = () => {
 
   return (
     <>
-      <mesh scale={[viewport.width, viewport.height, 1]} position={[0, 0, 0]}>
+      <mesh
+        scale={[viewport.width - 1, viewport.height - 1, 1]}
+        position={[0, 0, -2]}
+      >
         <planeGeometry />
         <transitionMaterial
           ref={$shader}

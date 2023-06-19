@@ -16,7 +16,8 @@ uniform sampler2D uTexture1;
     }
     
     void main() {
-        vec2 uv = CoverUV(vUv, uRes, uImageRes.xy);
+        // vec2 uv = CoverUV(vUv, uRes, uImageRes.xy);
+        vec2 uv = vUv;
         float z = uv.y + uProgress;
 
         vec4 colorA = texture2D(uTexture1, uv);
@@ -25,8 +26,8 @@ uniform sampler2D uTexture1;
         vec4 displacement = texture2D(uDisplace, uv);
         vec2 displacedUV = uv + vec2(0.0, displacement.r * 0.2);
 
-        float disp1 = (colorA.r + colorA.g + colorA.b) * 1.33;
-        float disp2 = (colorB.r + colorB.g + colorB.b) * 1.33;
+        float disp1 = (colorA.r + colorA.g + colorA.b) * .33;
+        float disp2 = (colorB.r + colorB.g + colorB.b) * .33;
 
         float intensity = 1.5;
 
