@@ -8,7 +8,6 @@ import { easing, geometry } from "maath";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Carousel from "./Carousel";
-import { motion as m3 } from "framer-motion-3d";
 
 extend(geometry);
 
