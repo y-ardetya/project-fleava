@@ -1,15 +1,17 @@
 import { RenderMaterial } from "./RenderMaterial";
 import { getDataTexture, getVelocityTexture } from "@/helpers/getDataTexture";
-import { useFrame, useThree } from "@react-three/fiber";
+import { extend, useFrame, useThree } from "@react-three/fiber";
 import { useRef, useMemo, useEffect } from "react";
 import * as THREE from "three";
-import { useTexture } from "@react-three/drei";
+import { useTexture, useGLTF, Sampler, Box } from "@react-three/drei";
 import { GPUComputationRenderer } from "three/examples/jsm/misc/GPUComputationRenderer";
 // @ts-ignore
 import computeVertexPosition from "./shaders/fbo/computePosition.glsl";
 // @ts-ignore
 import computeVertexVelocity from "./shaders/fbo/computeVelocity.glsl";
-import { MeshPhysicalMaterial, MeshMatcapMaterial } from "three";
+import { MeshMatcapMaterial } from "three";
+// @ts-ignore
+import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.js";
 // @ts-ignore
 import CustomShaderMaterial from "three-custom-shader-material";
 // @ts-ignore
@@ -22,6 +24,34 @@ declare global {
     }
   }
 }
+
+extend(MeshSurfaceSampler);
+
+const getPointOnModel = (size: number, model: any) => {
+  const number = size * size;
+  const data = new Float32Array(4 * number);
+  const sampler = new MeshSurfaceSampler(model).build();
+  const tempPosition = new THREE.Vector3();
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      const index = i * size + j;
+      sampler.sample(tempPosition);
+      data[4 * index + 0] = tempPosition.x * 10;
+      data[4 * index + 1] = tempPosition.y * 10;
+      data[4 * index + 2] = tempPosition.z * 10;
+      data[4 * index + 3] = Math.random() * 5;
+    }
+  }
+  let dataTexture = new THREE.DataTexture(
+    data,
+    size,
+    size,
+    THREE.RGBAFormat,
+    THREE.FloatType
+  );
+  dataTexture.needsUpdate = true;
+  return dataTexture;
+};
 
 const shader = {
   vertex: `
@@ -64,18 +94,22 @@ const shader = {
 
 const Particle = () => {
   const { viewport, gl } = useThree();
-  const $render = useRef<any>();
   const $mouse = useRef<any>();
   const $instance = useRef<any>();
   const count = 256;
-  const matcap = useTexture("/matcap1.png");
+  const matcap = useTexture("/matcap2.png");
+  const { nodes }: any = useGLTF("/penrose-transformed.glb");
+  const geom = nodes.Object_2.geometry;
+
+  const mat = new THREE.MeshNormalMaterial();
+  const sphere = new THREE.Mesh(geom, mat);
 
   const gpuCompute = new GPUComputationRenderer(count, count, gl);
-  const pointOnSphere = getDataTexture(count);
+  const pointOnModel = getPointOnModel(count, sphere);
   const positionVariable = gpuCompute.addVariable(
     "uCurrentPosition",
     computeVertexPosition,
-    pointOnSphere
+    pointOnModel
   );
   const velocityVariable = gpuCompute.addVariable(
     "uCurrentVelocity",
@@ -95,9 +129,9 @@ const Particle = () => {
   const positionUniforms = positionVariable.material.uniforms;
   const velocityUniforms = velocityVariable.material.uniforms;
 
-  velocityUniforms.uMouse = { value: new THREE.Vector3(0, 0, 0) };
-  positionUniforms.uOriginalPosition = { value: pointOnSphere };
-  velocityUniforms.uOriginalPosition = { value: pointOnSphere };
+  velocityUniforms.uMouse = { value: new THREE.Vector3(-5, -5, 0) };
+  positionUniforms.uOriginalPosition = { value: pointOnModel };
+  velocityUniforms.uOriginalPosition = { value: pointOnModel };
 
   gpuCompute.init();
 
@@ -147,8 +181,6 @@ const Particle = () => {
 
   useFrame(({ mouse }) => {
     gpuCompute.compute();
-    // $render.current.uniforms.uPosition.value =
-    //   gpuCompute.getCurrentRenderTarget(positionVariable).texture;
 
     $mouse.current.position.x = (mouse.x * viewport.width) / 2;
     $mouse.current.position.y = (mouse.y * viewport.height) / 2;
@@ -169,30 +201,10 @@ const Particle = () => {
         <sphereGeometry args={[0.1, 32, 32]} />
         <meshBasicMaterial color="red" />
       </mesh>
-      {/* <points>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={positions.length / 3}
-            array={positions}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-ref"
-            count={ref.length / 2}
-            array={ref}
-            itemSize={2}
-          />
-        </bufferGeometry>
-        <renderMaterial
-          transparent={true}
-          depthWrite={false}
-          depthTest={false}
-          ref={$render}
-          key={RenderMaterial}
-        />
-      </points> */}
       <instancedMesh
+        scale={1.3}
+        position={[0, 0, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
         ref={$instance}
         // @ts-ignore
         args={[null, null, count * count]}
@@ -214,3 +226,5 @@ const Particle = () => {
 };
 
 export default Particle;
+
+useGLTF.preload("/penrose-transformed.glb");

@@ -15,9 +15,9 @@ export const getDataTexture = (size: number) => {
       let y = Math.sin(phi) * Math.sin(theta);
       let z = Math.cos(phi);
 
-      data[4 * index + 0] = x;
-      data[4 * index + 1] = y;
-      data[4 * index + 2] = z;
+      data[4 * index + 0] = 2 * x;
+      data[4 * index + 1] = 2 * y;
+      data[4 * index + 2] = 2 * z;
       data[4 * index + 3] = 0;
     }
   }
@@ -67,3 +67,4 @@ export const getVelocityTexture = (size: number) => {
   dataTexture.needsUpdate = true;
   return dataTexture;
 };
+

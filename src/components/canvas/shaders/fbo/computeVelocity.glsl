@@ -5,8 +5,6 @@ uniform float uTime;
 float rand(vec2 co){
     return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
 }
-
-    //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
 //      Author : Ian McEwan, Ashima Arts.
@@ -48,11 +46,6 @@ float snoise(vec3 v)
   vec3 l = 1.0 - g;
   vec3 i1 = min( g.xyz, l.zxy );
   vec3 i2 = max( g.xyz, l.zxy );
-
-  //   x0 = x0 - 0.0 + 0.0 * C.xxx;
-  //   x1 = x0 - i1  + 1.0 * C.xxx;
-  //   x2 = x0 - i2  + 2.0 * C.xxx;
-  //   x3 = x0 - 1.0 + 3.0 * C.xxx;
   vec3 x1 = x0 - i1 + C.xxx;
   vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y
   vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y
@@ -142,7 +135,7 @@ vec3 curlNoise( vec3 p ){
 
 void main() {
     vec2 vUv = gl_FragCoord.xy / resolution.xy;
-    float offset = rand(vUv);
+    // float offset = rand(vUv);
     vec3 position = texture2D( uCurrentPosition, vUv ).xyz;
     vec3 original = texture2D( uOriginalPosition, vUv ).xyz;
     vec3 velocity = texture2D( uCurrentVelocity, vUv ).xyz;
@@ -156,15 +149,17 @@ void main() {
         velocity += direction  * 0.00001;
     }
 
-    velocity += curlNoise(position) * 0.0001;
+    velocity += sin(curlNoise(position) * 0.0001);
     
     // mouse repel force
     float mouseDistance = distance( position, uMouse );
-    float maxDistance = 0.6;
+    float maxDistance = 1.0;
     if( mouseDistance < maxDistance ) {
         vec3 direction = normalize( position - uMouse );
         velocity += direction * ( 1.0 - mouseDistance / maxDistance ) * 0.01;
     }
+
+    
     
     gl_FragColor = vec4(velocity, 1.);
 }
