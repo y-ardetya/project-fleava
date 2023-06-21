@@ -1,6 +1,5 @@
 "use client";
 
-import Carousel from "@/components/canvas/Carousel";
 import { Canvas } from "@react-three/fiber";
 import Scene from "@/components/canvas/Scene";
 import Overlay from "@/components/dom/Overlay";
