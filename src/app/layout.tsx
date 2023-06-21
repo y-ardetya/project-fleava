@@ -1,10 +1,5 @@
-"use client";
-
-import { Canvas } from "@react-three/fiber";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { Suspense } from "react";
-import { Loader } from "@react-three/drei";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,10 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Canvas gl={{ antialias: false, alpha: false }} dpr={1.5}>
-          <Suspense fallback={null}>{children}</Suspense>
-          <Loader />
-        </Canvas>
+ 
+          {children}
+   
       </body>
     </html>
   );

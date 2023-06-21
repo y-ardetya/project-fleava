@@ -96,7 +96,7 @@ const Particle = () => {
   const { viewport, gl } = useThree();
   const $mouse = useRef<any>();
   const $instance = useRef<any>();
-  const count = 128;
+  const count = 256;
   const matcap = useTexture("/matcap2.png");
   const { nodes }: any = useGLTF("/penrose-transformed.glb");
   const geom = nodes.Object_2.geometry;
