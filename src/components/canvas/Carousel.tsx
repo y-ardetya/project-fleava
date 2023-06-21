@@ -45,6 +45,8 @@ const Carousel = ({ position }: any) => {
 
   useEffect(() => {
     handleTransition();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataIndex]);
 
   return (
