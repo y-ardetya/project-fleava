@@ -8,7 +8,7 @@ interface Props {
   setModal: (modal: { active: boolean; index: number }) => void;
 }
 
-const index: React.FC<Props> = ({ index, title, description, setModal }) => {
+const Accordion: React.FC<Props> = ({ index, title, description, setModal }) => {
   return (
     <div
       // i dont know what is it for
@@ -27,4 +27,4 @@ const index: React.FC<Props> = ({ index, title, description, setModal }) => {
   );
 };
 
-export default index;
+export default Accordion;

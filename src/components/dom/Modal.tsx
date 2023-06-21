@@ -24,7 +24,7 @@ const scaleAnimation = {
   },
 };
 
-const index: React.FC<Props> = ({ modal, projects }) => {
+const Modal: React.FC<Props> = ({ modal, projects }) => {
   const $ref = useRef<HTMLInputElement>(null);
   const $cursor = useRef<HTMLInputElement>(null);
   const { active, index } = modal;
@@ -102,4 +102,4 @@ const index: React.FC<Props> = ({ modal, projects }) => {
   );
 };
 
-export default index;
+export default Modal;

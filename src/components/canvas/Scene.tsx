@@ -5,7 +5,6 @@ import { extend, useThree } from "@react-three/fiber";
 import {  MeshPortalMaterial } from "@react-three/drei";
 import { geometry } from "maath";
 import { motion as m3 } from "framer-motion-3d";
-import { useRouter } from "next/navigation";
 import Particle from "./Particle";
 
 extend(geometry);
