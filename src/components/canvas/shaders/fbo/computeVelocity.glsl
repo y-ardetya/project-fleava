@@ -56,9 +56,6 @@ float snoise(vec3 v)
              i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
            + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
            + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
-
-// Gradients: 7x7 points over a square, mapped onto an octahedron.
-// The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
   float n_ = 0.142857142857; // 1.0/7.0
   vec3  ns = n_ * D.wyz - D.xzx;
 
@@ -135,30 +132,33 @@ vec3 curlNoise( vec3 p ){
 
 void main() {
     vec2 vUv = gl_FragCoord.xy / resolution.xy;
-    // float offset = rand(vUv);
+    float offset = rand(vUv);
     vec3 position = texture2D( uCurrentPosition, vUv ).xyz;
     vec3 original = texture2D( uOriginalPosition, vUv ).xyz;
     vec3 velocity = texture2D( uCurrentVelocity, vUv ).xyz;
 
-    velocity *= 0.9;
+    vec3 finalOriginal = original;
+
+    velocity *= 0.99;
 
     // particle attraction to shape force
     vec3 direction = normalize( original - position );
     float dist = length( original - position );
     if( dist > 0.01 ) {
-        velocity += direction  * 0.00001;
+        velocity += direction  * 0.0001;
     }
 
-    velocity += sin(curlNoise(position) * 0.0001);
     
     // mouse repel force
     float mouseDistance = distance( position, uMouse );
-    float maxDistance = 1.0;
+    float maxDistance = 1.7;
     if( mouseDistance < maxDistance ) {
         vec3 direction = normalize( position - uMouse );
         velocity += direction * ( 1.0 - mouseDistance / maxDistance ) * 0.01;
+        velocity += sin(curlNoise(direction) * 0.001);
     }
 
+    position += velocity;
     
     
     gl_FragColor = vec4(velocity, 1.);

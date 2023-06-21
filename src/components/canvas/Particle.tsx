@@ -96,7 +96,7 @@ const Particle = () => {
   const { viewport, gl } = useThree();
   const $mouse = useRef<any>();
   const $instance = useRef<any>();
-  const count = 256;
+  const count = 128;
   const matcap = useTexture("/matcap2.png");
   const { nodes }: any = useGLTF("/penrose-transformed.glb");
   const geom = nodes.Object_2.geometry;
@@ -129,7 +129,7 @@ const Particle = () => {
   const positionUniforms = positionVariable.material.uniforms;
   const velocityUniforms = velocityVariable.material.uniforms;
 
-  velocityUniforms.uMouse = { value: new THREE.Vector3(-5, -5, 0) };
+  velocityUniforms.uMouse = { value: new THREE.Vector3(-10, -10, 0) };
   positionUniforms.uOriginalPosition = { value: pointOnModel };
   velocityUniforms.uOriginalPosition = { value: pointOnModel };
 
@@ -182,8 +182,8 @@ const Particle = () => {
   useFrame(({ mouse }) => {
     gpuCompute.compute();
 
-    $mouse.current.position.x = (mouse.x * viewport.width) / 2;
-    $mouse.current.position.y = (mouse.y * viewport.height) / 2;
+    // $mouse.current.position.x = (mouse.x * viewport.width) / 2;
+    // $mouse.current.position.y = (mouse.y * viewport.height) / 2;
 
     velocityUniforms.uMouse.value.x = (mouse.x * viewport.width) / 2;
     velocityUniforms.uMouse.value.y = (mouse.y * viewport.height) / 2;
@@ -197,23 +197,21 @@ const Particle = () => {
 
   return (
     <>
-      <mesh ref={$mouse}>
+      {/* <mesh ref={$mouse}>
         <sphereGeometry args={[0.1, 32, 32]} />
         <meshBasicMaterial color="red" />
-      </mesh>
+      </mesh> */}
       <instancedMesh
-        scale={1.3}
+        scale={1.2}
         position={[0, 0, 0]}
-        rotation={[-Math.PI / 2, 0, 0]}
+        rotation={[-Math.PI / 2, -0.1, 0]}
         ref={$instance}
         // @ts-ignore
         args={[null, null, count * count]}
       >
-        <boxGeometry args={[0.01, 0.03, 0.01]} />
+        <boxGeometry args={[0.015, 0.04, 0.015]} />
         <CustomShaderMaterial
           baseMaterial={MeshMatcapMaterial}
-          // @ts-ignore
-          size={0.01}
           vertexShader={patchShaders(shader.vertex)}
           fragmentShader={patchShaders(shader.fragment)}
           uniforms={uniforms}
