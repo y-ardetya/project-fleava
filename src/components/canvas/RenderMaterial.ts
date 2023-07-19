@@ -8,6 +8,7 @@ import fragment from "./shaders/fbo/renderFragment.glsl";
 const RenderMaterial = shaderMaterial(
   {
     uPosition: null,
+    uTime : 0,
   },
   vertex,
   fragment

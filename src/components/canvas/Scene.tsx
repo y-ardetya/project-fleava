@@ -18,34 +18,6 @@ declare global {
   }
 }
 
-// const Frame = ({ children, position, name }: any) => {
-//   const { controls, scene } = useThree();
-//   const $portal = useRef<any>();
-//   const $camera = useRef<any>();
-//   const $mesh = useRef<any>();
-//   const router = useRouter();
-//   const [open, setOpen] = useState(false);
-
-//   return (
-//     <>
-//       <m3.mesh
-//         ref={$mesh}
-//         name={name}
-//         animate={open ? { scale: 8.1 } : { scale: 3 }}
-//         transition={{ duration: 0.5, ease: "easeInOut" }}
-//         scale={3}
-//         position={position}
-//         onClick={() => setOpen(!open)}
-//       >
-//         <roundedPlaneGeometry />
-//         <MeshPortalMaterial ref={$portal} blending={1} blur={1} blendDstAlpha={1}>
-//           {children}
-//         </MeshPortalMaterial>
-//       </m3.mesh>
-//     </>
-//   );
-// };
-
 const Scene = () => {
   return (
     <>

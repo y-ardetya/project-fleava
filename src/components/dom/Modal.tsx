@@ -75,7 +75,10 @@ const Modal: React.FC<Props> = ({ modal, projects }) => {
           {projects.map((project: any, index: number) => {
             const { url } = project;
             return (
-              <div key={index} className="relative h-full flex items-center justify-center">
+              <div
+                key={index}
+                className="relative h-full flex items-center justify-center"
+              >
                 <Image
                   src={`/images/${url}`}
                   alt="image"

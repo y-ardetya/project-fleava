@@ -20,7 +20,6 @@ const Carousel = ({ position }: any) => {
     state.dataIndex,
     state.setDataIndex,
   ]);
-
   const $shader = useRef<any>(null);
   const textures = useTexture([
     "/images/one.jpg",
@@ -39,14 +38,16 @@ const Carousel = ({ position }: any) => {
     gsap.fromTo(
       $shader.current.uniforms.uProgress,
       { value: 0 },
-      { value: 1, duration: 1.0, ease: "power2.easeOut" }
+      { value: 1, duration: 0.6, ease: "easeOut" }
     );
   };
 
   useEffect(() => {
+    if ($shader.current) {
+      $shader.current.uniforms.uRes.value.x = viewport.width;
+      $shader.current.uniforms.uRes.value.y = viewport.height;
+    }
     handleTransition();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataIndex]);
 
   return (
